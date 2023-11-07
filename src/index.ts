@@ -1,10 +1,12 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
-import { IUserRepository } from "./repositories";
-import { IUserHandler } from "./handlers";
+import { ICourseRepository, IUserRepository } from "./repositories";
+import { ICourseHandler, IUserHandler } from "./handlers";
 import UserRepository from "./repositories/user";
 import UserHandler from "./handlers/user";
 import JWTMiddleware from "./middleware/jwt";
+import CourseRepository from "./repositories/course";
+import CourseHandler from "./handlers/course";
 
 const clnt = new PrismaClient();
 const PORT = Number(process.env.PORT || 8888);
@@ -12,6 +14,9 @@ const app = express();
 
 const userRepo: IUserRepository = new UserRepository(clnt);
 const userHandler: IUserHandler = new UserHandler(userRepo);
+
+const courseRepo: ICourseRepository = new CourseRepository(clnt);
+const courseHandler: ICourseHandler = new CourseHandler(courseRepo);
 
 const jwtMiddleware = new JWTMiddleware();
 
@@ -32,6 +37,13 @@ const authRouter = express.Router();
 
 app.use("/auth", authRouter);
 authRouter.get("/me", jwtMiddleware.auth, userHandler.selfcheck);
+
+//------------------------------------------------------------
+
+const courseRouter = express.Router();
+
+app.use("/course", courseRouter);
+courseRouter.get("/:id", courseHandler.getById);
 
 //------------------------------------------------------------
 
