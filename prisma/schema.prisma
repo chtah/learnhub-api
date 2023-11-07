@@ -41,8 +41,10 @@ model submenu {
 }
 
 model topic {
-  id          Int     @id @default(autoincrement())
-  topic_title String
-  submenu     submenu @relation(fields: [submenuId], references: [id])
-  submenuId   Int
+  id                Int     @id @default(autoincrement())
+  topic_title       String
+  topic_description String
+  topic_url         String
+  submenu           submenu @relation(fields: [submenuId], references: [id])
+  submenuId         Int
 }

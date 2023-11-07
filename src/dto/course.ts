@@ -1,9 +1,15 @@
 import { course, menu, submenu, topic } from "@prisma/client";
 
-export interface ICourseDto extends course {}
+export interface ICourseDto extends Omit<course, "id"> {
+  menu: IMenuDto[];
+}
 
-export interface IMenuDto extends Omit<menu, "courseId"> {}
+export interface IMenuDto extends Omit<menu, "id" | "courseId"> {
+  submenu: ISubmenuDto[];
+}
 
-export interface ISubmenuDto extends Omit<submenu, "menuId"> {}
+export interface ISubmenuDto extends Omit<submenu, "id" | "menuId"> {
+  topic: ITopicDto[];
+}
 
-export interface ITopicDto extends Omit<topic, "submenuId"> {}
+export interface ITopicDto extends Omit<topic, "id" | "submenuId"> {}
