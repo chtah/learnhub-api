@@ -7,6 +7,7 @@ import UserHandler from "./handlers/user";
 import JWTMiddleware from "./middleware/jwt";
 import CourseRepository from "./repositories/course";
 import CourseHandler from "./handlers/course";
+import cors from "cors";
 
 const clnt = new PrismaClient();
 const PORT = Number(process.env.PORT || 8888);
@@ -21,6 +22,7 @@ const courseHandler: ICourseHandler = new CourseHandler(courseRepo);
 const jwtMiddleware = new JWTMiddleware();
 
 app.use(express.json());
+app.use(cors());
 
 //------------------------------------------------------------
 app.get("/", jwtMiddleware.auth, (req, res) => {
